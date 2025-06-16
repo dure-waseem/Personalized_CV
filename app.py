@@ -28,6 +28,7 @@ if not os.getenv("OPENAI_API_KEY"):
     st.stop()
 
 db_path = "../db"  # Default database path
+os.makedirs(db_path, exist_ok=True)
 collection_name = "my_collection"
 
 # Create tabs
