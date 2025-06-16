@@ -6,6 +6,8 @@ import chromadb.utils.embedding_functions as embedding_functions
 from dotenv import load_dotenv
 import os
 from openai import OpenAI  # Updated import
+# import os
+import streamlit as st
 
 load_dotenv()
 
@@ -15,13 +17,14 @@ class ChromaCollection:
         self.chroma_client = chromadb.PersistentClient(path=db_path)
         self.collection_name = collection_name
         self.collection = None
-        self.openai_ef = os.getenv("OPENAI_API_KEY")
+        self.openai_ef = st.secrets["OPENAI_API_KEY"] if "OPENAI_API_KEY" in st.secrets else os.getenv("OPENAI_API_KEY")
+        # self.openai_ef = os.getenv("OPENAI_API_KEY")
         self.openai_ef = embedding_functions.OpenAIEmbeddingFunction(
             api_key=self.openai_ef,
             model_name="text-embedding-ada-002"
         )
         # Initialize OpenAI client
-        self.openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.openai_client = OpenAI(api_key=self.openai_ef)
         self._initialize_collection()
 
     def _initialize_collection(self):

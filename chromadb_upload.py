@@ -5,6 +5,7 @@ import chromadb.utils.embedding_functions as embedding_functions
 from dotenv import load_dotenv
 import os
 import io
+import streamlit as st
 
 load_dotenv()
 
@@ -14,7 +15,13 @@ class ChromaUploader:
         self.chroma_client = chromadb.PersistentClient(path=db_path)
         self.collection_name = collection_name
         self.collection = None
-        self.openai_ef = os.getenv("OPENAI_API_KEY")
+        # self.openai_ef = os.getenv("OPENAI_API_KEY")
+        # self.openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+        #     api_key=self.openai_ef,
+        #     model_name="text-embedding-ada-002"
+        # )
+        self.openai_ef = st.secrets["OPENAI_API_KEY"] if "OPENAI_API_KEY" in st.secrets else os.getenv("OPENAI_API_KEY")
+        # self.openai_ef = os.getenv("OPENAI_API_KEY")
         self.openai_ef = embedding_functions.OpenAIEmbeddingFunction(
             api_key=self.openai_ef,
             model_name="text-embedding-ada-002"
